@@ -1,19 +1,32 @@
-# Fill this in before you submit -- our evaluator runs these commands
-# EXACTLY as written, in this order, from a fresh checkout of your fork.
-# Keep every command non-interactive (no prompts) and idempotent.
+# Commands run EXACTLY as written, in order, from a fresh checkout.
+# All are non-interactive and idempotent (re-running skips completed downloads/exports).
 
 setup_commands:
   - "pip install -r requirements.txt"
-  # - add every other setup step here, in order (env vars, downloads, etc.)
+  # 90 videos, 11.2 GB, from huggingface.co/datasets/aintropy-ai/video-mme-sample10 (skips complete files)
+  - "python src/main.py download"
+  # one-time: MobileCLIP2-S0 -> ONNX, class-prompt text embeddings, Silero VAD model (~50 MB)
+  - "python src/main.py export-encoder"
 
 run_commands:
-  - "python src/main.py --help"
-  # - the real command(s) that actually run your solution
+  # per-window features for all 90 videos (CPU, ~1.3 s/video single-threaded; 4 workers in parallel)
+  - "python src/main.py features --workers 4"
+  # class balance + feature analysis -> docs/figures/*.png, docs/eda.md
+  - "python src/main.py eda"
+  # tune on the train split, 5x5 grouped CV of every variant, score the locked test split, save the model
+  - "python src/main.py train"
+  # results tables and figures -> docs/results.md, docs/figures/
+  - "python src/main.py report"
+  # classify individual videos with the shipped model (JSON: class, confidence, route, chunking strategy, latency)
+  - "python src/main.py predict data/video-mme-sample10/videos/026dzf-vc5g.mp4 data/video-mme-sample10/videos/xvQOEdwAgj0.mp4"
 
-test_commands: []
-  # optional -- commands that run your own tests/checks, if you have any
+test_commands:
+  - "python -m pytest -q"
 
-notes: ""
-  # anything we should know before running this (e.g. "needs a GPU",
-  # "takes about 10 minutes", "expects a sample dataset already present
-  # under data/, see docs/ for where to get it")
+notes: >
+  CPU only, no GPU or API keys needed. Python 3.10+. ffmpeg/ffprobe are used if installed;
+  otherwise the static-ffmpeg package downloads static binaries on first use (~9 s).
+  The download step fetches 11.2 GB; set VCLF_DATA_DIR to reuse an existing copy of the dataset.
+  End to end after the download: ~1 min features (4 workers, 8-core laptop) + ~2 min training.
+  Labels are committed in labels/labels.csv (90 human-reviewed) and the locked test split in labels/split.csv.
+  Tests generate tiny synthetic clips and need neither the dataset nor the network.

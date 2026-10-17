@@ -5,3 +5,12 @@ venv/
 .env
 node_modules/
 .DS_Store
+.pytest_cache/
+
+# Dataset (11 GB, fetched by `python src/main.py download`) and generated outputs
+data
+data/
+artifacts/
+
+# Local editor/agent config
+.claude/
