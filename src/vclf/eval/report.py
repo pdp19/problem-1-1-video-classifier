@@ -118,7 +118,7 @@ def run(log=print) -> None:
         "# Results",
         "",
         f"Selected model: **{summary['selected']}** (rule: {summary['selection_rule']}). "
-        f"Trained on {summary['n_train']} videos, scored once on {summary['n_test']} locked test videos. "
+        f"Trained on {summary['n_train']} videos, evaluated on {summary['n_test']} held-out test videos. "
         f"Model file {summary['model_file_kb']:.0f} KB, classifier time {summary['classifier_inference_ms_per_video']:.2f} ms/video.",
         "",
         "| metric | locked test split | all-data repeated CV (90 videos) |",

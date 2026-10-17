@@ -2,7 +2,7 @@
 
 Sorts incoming videos into **8 classes defined by how they should be chunked**
 (not by topic), so a video index can apply the right chunker to each one.
-Runs on a CPU at **~1.3 s per video regardless of length** (median, 1 worker),
+Runs on a CPU at about 1.3 s per video (median, one worker; 1.9 s at p95),
 with a 1 MB classifier on top of an 11M-parameter image encoder served through
 ONNX Runtime.
 
@@ -21,12 +21,12 @@ ONNX Runtime.
 
 | | macro-F1 [95% CI] | accuracy | top-2 acc. | routing regret |
 |---|---|---|---|---|
-| **locked test split** (23 videos, scored once) | 0.64 [0.38, 0.89] | 0.74 | 0.96 | 0.11 |
+| locked test split (23 videos, held out from training) | 0.64 [0.38, 0.89] | 0.74 | 0.96 | 0.11 |
 | repeated 5x5 CV, all 90 videos | 0.79 [0.64, 0.88] | 0.82 | 0.93 | 0.08 |
 | zero-shot MobileCLIP only (no training) | 0.62 | | | |
 
-Full tables, every variant and the latency breakdown: [docs/results.md](docs/results.md).
-Data analysis: [docs/eda.md](docs/eda.md).
+Write-up: [docs/README.md](docs/README.md). Feature engineering: [docs/feature_engineering.md](docs/feature_engineering.md).
+Deployment plan: [docs/deployment.md](docs/deployment.md). Full results: [docs/results.md](docs/results.md). Data analysis: [docs/eda.md](docs/eda.md).
 
 ## Run it
 

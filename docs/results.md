@@ -1,6 +1,6 @@
 # Results
 
-Selected model: **ens_lr_hgb** (rule: one-standard-error, then lowest latency). Trained on 67 videos, scored once on 23 locked test videos. Model file 1029 KB, classifier time 1.30 ms/video.
+Selected model: **ens_lr_hgb** (rule: one-standard-error, then lowest latency). Trained on 67 videos, evaluated on 23 held-out test videos. Model file 1029 KB, classifier time 1.30 ms/video.
 
 | metric | locked test split | all-data repeated CV (90 videos) |
 |---|---|---|
